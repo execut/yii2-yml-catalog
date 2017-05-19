@@ -1,14 +1,31 @@
 <?php
 namespace pastuhov\ymlcatalog\Test\models;
 
+use pastuhov\ymlcatalog\BaseFindYmlInterface;
 use pastuhov\ymlcatalog\SimpleOfferInterface;
 use yii\db\ActiveRecord;
 
 /**
  * @inheritdoc
  */
-class SimpleOffer extends ActiveRecord implements SimpleOfferInterface
+class SimpleOffer extends ActiveRecord implements SimpleOfferInterface, BaseFindYmlInterface
 {
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->attributes['name'];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getVendor()
+    {
+        return null;
+    }
 
     /**
      * @inheritdoc
@@ -37,7 +54,7 @@ class SimpleOffer extends ActiveRecord implements SimpleOfferInterface
     /**
      * @inheritdoc
      */
-    public function getOldPrice()
+    public function getOldprice()
     {
         return $this->attributes['old_price'];
     }
@@ -56,14 +73,6 @@ class SimpleOffer extends ActiveRecord implements SimpleOfferInterface
     public function getCategoryId()
     {
         return $this->attributes['category_id'];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getMarket_Category()
-    {
-        return null;
     }
 
     /**
@@ -101,31 +110,11 @@ class SimpleOffer extends ActiveRecord implements SimpleOfferInterface
      */
     public function getDelivery()
     {
-        return 'true';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getLocal_Delivery_Cost()
-    {
-        return null;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getName()
-    {
-        return $this->attributes['name'];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getVendor()
-    {
-        return null;
+        if ($this->getId() != 12) {
+            return 'true';
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -155,7 +144,7 @@ class SimpleOffer extends ActiveRecord implements SimpleOfferInterface
     /**
      * @inheritdoc
      */
-    public function getManufacturer_Warranty()
+    public function getManufacturer_warranty()
     {
         return null;
     }
@@ -163,7 +152,7 @@ class SimpleOffer extends ActiveRecord implements SimpleOfferInterface
     /**
      * @inheritdoc
      */
-    public function getCountry_Of_Origin()
+    public function getCountry_of_origin()
     {
         return null;
     }
@@ -260,7 +249,7 @@ class SimpleOffer extends ActiveRecord implements SimpleOfferInterface
      */
     public function getDeliveryOptions()
     {
-        $result = [];
+        $options = [];
         // если id товарного предложения равен 12, то для теста возвращаем пустой массив опций
         if($this->getId() != 12) {
             $options = [
@@ -273,15 +262,113 @@ class SimpleOffer extends ActiveRecord implements SimpleOfferInterface
                     'days' => '1'
                 ],
             ];
-
-            foreach($options as $option) {
-                $deliveryOption = new DeliveryOption();
-                $deliveryOption->cost = $option['cost'];
-                $deliveryOption->days = $option['days'];
-                $result[] = $deliveryOption;
-            }
         }
 
-        return $result;
+        return $options;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getModel()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFee()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOutlets()
+    {
+        if($this->getId() != 12) {
+            return [];
+        }
+        return [
+            [
+                'id' => 1,
+                'instock' => 20,
+                'booking' => 'true',
+            ]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMinQuantity()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getStepQuantity()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExpiry()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWeight()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDimensionsValues()
+    {
+        if ($this->getId() != 12) {
+            return [];
+        }
+
+        return [1, 2.1, 3.1];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDownloadable()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getGroup_id()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRecValues()
+    {
+        if ($this->getId() != 12) {
+            return [];
+        }
+
+        return [1,2,3];
     }
 }

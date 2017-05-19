@@ -3,10 +3,16 @@ namespace pastuhov\ymlcatalog\Test;
 
 use pastuhov\FileStream\BaseFileStream;
 use pastuhov\ymlcatalog\Test\controllers\GenerateController;
+use pastuhov\ymlcatalog\Test\models\Category;
+use pastuhov\ymlcatalog\Test\models\Currency;
+use pastuhov\ymlcatalog\Test\models\CustomItem;
 use pastuhov\ymlcatalog\Test\models\CustomOffer;
+use pastuhov\ymlcatalog\Test\models\DeliveryOption;
+use pastuhov\ymlcatalog\Test\models\Shop;
 use pastuhov\ymlcatalog\Test\models\SimpleOffer;
 use pastuhov\ymlcatalog\YmlCatalog;
 use Yii;
+use yii\base\Exception;
 use yii\console\Controller;
 use yii\db\Connection;
 use yii\data\ActiveDataProvider;
@@ -35,15 +41,14 @@ class YmlCatalogTest extends DatabaseTestCase
     {
         $handle = new BaseFileStream(__DIR__ . '/runtime/yml-catalog.xml');
 
-        $generator = new YmlCatalog(
-            $handle,
-            'pastuhov\ymlcatalog\Test\models\Shop',
-            'pastuhov\ymlcatalog\Test\models\Currency',
-            'pastuhov\ymlcatalog\Test\models\Category',
-            null,
-            [
+        $generator = new YmlCatalog([
+            'handle' => $handle,
+            'shopClass' => Shop::class,
+            'currencyClass' => Currency::class,
+            'categoryClass' => Category::class,
+            'offerClass' => [
                 [
-                    'class' => 'pastuhov\ymlcatalog\Test\models\SimpleOffer',
+                    'class' => SimpleOffer::class,
                     'findParams' => [
                         'excluded' => [
                             13
@@ -51,42 +56,21 @@ class YmlCatalogTest extends DatabaseTestCase
                     ]
                 ]
             ],
-            '2015-01-01 14:00',
-            function () {
+            'date' => '2015-01-01 14:00',
+            'onValidationError' => function ($model, $e) {
+                if ($model instanceof \pastuhov\ymlcatalog\models\Currency) {
+                    return;
+                }
 
+                throw $e;
             },
-            null,
-            'pastuhov\ymlcatalog\Test\models\DeliveryOption'
-        );
+            'deliveryOptionClass' => DeliveryOption::class
+        ]);
         $generator->generate();
 
         $this->assertXmlFileEqualsXmlFile(__DIR__ . '/data/yml-catalog.xml', __DIR__ . '/runtime/yml-catalog.xml');
     }
 
-    /**
-     * Custom offer model test
-     */
-    public function testYmlCatalogWithCustomModel()
-    {
-        $this->setExpectedException('yii\base\Exception', 'custom offer model exception');
-        $handle = new BaseFileStream(__DIR__ . '/runtime/yml-catalog.xml');
-
-        $generator = new YmlCatalog(
-            $handle,
-            'pastuhov\ymlcatalog\Test\models\Shop',
-            'pastuhov\ymlcatalog\Test\models\Currency',
-            'pastuhov\ymlcatalog\Test\models\Category',
-            'pastuhov\ymlcatalog\Test\models\LocalDeliveryCost',
-            ['pastuhov\ymlcatalog\Test\models\CustomItem'],
-            '2015-01-01 14:00',
-            function () {
-
-            },
-            CustomOffer::className()
-        );
-        $generator->generate();
-    }
-    
     /**
      * Тестирование генерации yml файла с использованием ActiveDataProvider и сравнение с эталонным файлом
      */
@@ -94,30 +78,26 @@ class YmlCatalogTest extends DatabaseTestCase
     {
         $handle = new BaseFileStream(__DIR__ . '/runtime/yml-catalog.xml');
 
-        $generator = new YmlCatalog(
-            $handle,
-            'pastuhov\ymlcatalog\Test\models\Shop',
-            'pastuhov\ymlcatalog\Test\models\Currency',
-            'pastuhov\ymlcatalog\Test\models\Category',
-            null,
-            [
+        $generator = new YmlCatalog([
+            'handle' => $handle,
+            'shopClass' => Shop::class,
+            'currencyClass' => Currency::class,
+            'categoryClass' => Category::class,
+            'offerClass' => [
                 [
-                    'class' => 'pastuhov\ymlcatalog\Test\models\SimpleOffer',
+                    'class' => SimpleOffer::class,
                     'dataProvider' => new ActiveDataProvider([
                         'query' => SimpleOffer::findYml()->andWhere(['not in', 'id', [13]]),
                         'pagination' => [
                             'pageSize' => 100,
-                         ],
+                        ],
                     ]),
                 ]
             ],
-            '2015-01-01 14:00',
-            function () {
-
-            },
-            null,
-            'pastuhov\ymlcatalog\Test\models\DeliveryOption'
-        );
+            'date' => '2015-01-01 14:00',
+            'onValidationError' => function ($model, $e) {},
+            'deliveryOptionClass' => DeliveryOption::class,
+        ]);
         $generator->generate();
 
         $this->assertXmlFileEqualsXmlFile(__DIR__ . '/data/yml-catalog.xml', __DIR__ . '/runtime/yml-catalog.xml');
@@ -130,25 +110,21 @@ class YmlCatalogTest extends DatabaseTestCase
     {
         $handle = new BaseFileStream(__DIR__ . '/runtime/yml-catalog.xml');
 
-        $generator = new YmlCatalog(
-            $handle,
-            'pastuhov\ymlcatalog\Test\models\Shop',
-            'pastuhov\ymlcatalog\Test\models\Currency',
-            'pastuhov\ymlcatalog\Test\models\Category',
-            null,
-            [
+        $generator = new YmlCatalog([
+            'handle' => $handle,
+            'shopClass' => Shop::class,
+            'currencyClass' => Currency::class,
+            'categoryClass' => Category::class,
+            'offerClass' => [
                 [
-                    'class' => 'pastuhov\ymlcatalog\Test\models\SimpleOffer',
+                    'class' => SimpleOffer::class,
                     'query' => SimpleOffer::findYml()->andWhere(['not in', 'id', [13]]),
                 ]
             ],
-            '2015-01-01 14:00',
-            function () {
-
-            },
-            null,
-            'pastuhov\ymlcatalog\Test\models\DeliveryOption'
-        );
+            'date' => '2015-01-01 14:00',
+            'onValidationError' => function ($model, $e) {},
+            'deliveryOptionClass' => DeliveryOption::class,
+        ]);
         $generator->generate();
 
         $this->assertXmlFileEqualsXmlFile(__DIR__ . '/data/yml-catalog.xml', __DIR__ . '/runtime/yml-catalog.xml');

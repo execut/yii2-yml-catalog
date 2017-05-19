@@ -50,8 +50,7 @@ class YmlController extends Controller
                 'shopClass' => 'pastuhov\ymlcatalog\Test\models\Shop',
                 'currencyClass' => 'pastuhov\ymlcatalog\Test\models\Currency',
                 'categoryClass' => 'pastuhov\ymlcatalog\Test\models\Category',
-                'localDeliveryCostClass' => 'pastuhov\ymlcatalog\Test\models\LocalDeliveryCost',
-                'offerClasses' => [
+                'offerClass' => [ # Можно указывать сразу несколько моделей
                     'pastuhov\ymlcatalog\Test\models\SimpleOffer'
                 ],
             ],
@@ -103,6 +102,15 @@ $ phpunit
 1. Официальным валидатором https://old.webmaster.yandex.ru/xsdtest.xml 
 2. При помощи `xmllint` (пример: xmllint --valid --noout yml-test.xml)
 3. IDE PhpStorm также может помочь
+
+
+## Планы
+
+* Поддержка price from="true"
+* Поддержка age
+* Поддержка нескольких barcode
+* Поддержка в expiry формата вида P1Y2M10DT2H30M
+* Действие для скачивания файла напрямую Яндексом
 
 ## Security
 

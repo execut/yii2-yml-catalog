@@ -54,17 +54,12 @@ class GenerateAction extends Action
     /**
      * @var string
      */
-    public $localDeliveryCostClass;
-
-    /**
-     * @var string
-     */
     public $categoryClass;
 
     /**
      * @var string[]
      */
-    public $offerClasses;
+    public $offerClass;
 
     /**
      * @var string
@@ -89,7 +84,7 @@ class GenerateAction extends Action
     /**
      * @var string
      */
-    public $gzipCommand = 'gzip {keep_src} {src}';
+    public $gzipCommand = 'gzip -f {keep_src} {src}';
 
     /**
      * Генерация YML.
@@ -101,18 +96,21 @@ class GenerateAction extends Action
         $fileName = \Yii::getAlias($this->runtimePath) . DIRECTORY_SEPARATOR . $this->fileName;
         $handle = new $this->handleClass($fileName);
 
-        $generator = new YmlCatalog(
-            $handle,
-            $this->shopClass,
-            $this->currencyClass,
-            $this->categoryClass,
-            $this->localDeliveryCostClass,
-            $this->offerClasses,
-            null,
-            $this->onValidationError,
-            $this->customOfferClass,
-            $this->deliveryOptionClass
-        );
+        $generatorAttributes = [
+            'shopClass',
+            'currencyClass',
+            'categoryClass',
+            'offerClass',
+            'onValidationError',
+            'deliveryOptionClass'
+        ];
+        $generatorParams = [
+            'handle' => $handle,
+        ];
+        foreach ($generatorAttributes as $attribute) {
+            $generatorParams[$attribute] = $this->$attribute;
+        }
+        $generator = new YmlCatalog($generatorParams);
         $generator->generate();
 
         if ($this->enableGzip === true) {

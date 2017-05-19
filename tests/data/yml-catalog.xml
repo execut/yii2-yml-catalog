@@ -9,6 +9,7 @@
 <version>2.3</version>
 <agency>Agency</agency>
 <email>CMS@CMS.ru</email>
+<cpa>1</cpa>
 
 <currencies>
 <currency id="RUR" rate="1"/>
@@ -44,20 +45,24 @@
 <price>1000</price>
 <currencyId>RUR</currencyId>
 <categoryId>10</categoryId>
-<delivery>true</delivery>
-<name>Лазернй принтер 234234234</name>
 <description>Крутой принтер на лазере.</description>
+<dimensions>1/2.1/3.1</dimensions>
+<rec>1,2,3</rec>
+<name>Лазернй принтер 234234234</name>
 <picture>http://magazin.ru/img/device12.jpg</picture>
 <picture>http://magazin.ru/img/device12_2.jpg</picture>
+<outlet>
+<outlet booking="true" id="1" instock="20"/>
+</outlet>
 </offer>
 <offer id="12341" bid="13" cbid="20" available="true"><url>http://magazin.ru/product_page.asp?pid=12341</url>
 <price>15000</price>
 <currencyId>RUR</currencyId>
 <categoryId>1</categoryId>
 <delivery>true</delivery>
-<name>Наручные часы Casio A1234567B</name>
 <description>Изящные наручные часы.</description>
 <sales_notes>по предоплате</sales_notes>
+<name>Наручные часы Casio A1234567B</name>
 <picture>http://magazin.ru/img/device12341.jpg</picture>
 <delivery-options>
 <option cost="123" days="2" />
