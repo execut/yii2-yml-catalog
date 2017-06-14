@@ -186,7 +186,11 @@ class BaseModel extends Model
      */
     protected function getAttributeValue($attribute)
     {
-        return $this->$attribute;
+        if ($this->$attribute !== null) {
+            $result = htmlspecialchars(trim($this->$attribute));
+
+            return $result;
+        }
     }
 
     /**
