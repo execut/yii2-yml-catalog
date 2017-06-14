@@ -1,6 +1,7 @@
 <?php
 namespace pastuhov\ymlcatalog\models;
 
+use pastuhov\ymlcatalog\EscapedAttributes;
 use yii\base\Model;
 use yii\base\Exception;
 
@@ -22,6 +23,11 @@ class BaseModel extends Model
     public static function getTagProperties() {
         return [];
     }
+
+    /**
+     * @var string[]
+     */
+    protected $escapedAttributes = [];
 
     /**
      * @return string[]
@@ -103,6 +109,10 @@ class BaseModel extends Model
     {
         if (is_array($valuesModel)) {
             $valuesModel = \yii::createObject($valuesModel);
+        }
+
+        if ($valuesModel instanceof EscapedAttributes) {
+            $this->escapedAttributes = $valuesModel->getEscapedAttributes();
         }
 
         $attributes = [];
@@ -187,7 +197,10 @@ class BaseModel extends Model
     protected function getAttributeValue($attribute)
     {
         if ($this->$attribute !== null) {
-            $result = htmlspecialchars(trim($this->$attribute));
+            $result = trim($this->$attribute);
+            if (in_array($attribute, $this->escapedAttributes)) {
+                $result = htmlspecialchars($result);
+            }
 
             return $result;
         }

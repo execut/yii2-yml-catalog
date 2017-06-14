@@ -2,13 +2,14 @@
 namespace pastuhov\ymlcatalog\Test\models;
 
 use pastuhov\ymlcatalog\BaseFindYmlInterface;
+use pastuhov\ymlcatalog\EscapedAttributes;
 use pastuhov\ymlcatalog\SimpleOfferInterface;
 use yii\db\ActiveRecord;
 
 /**
  * @inheritdoc
  */
-class SimpleOffer extends ActiveRecord implements SimpleOfferInterface, BaseFindYmlInterface
+class SimpleOffer extends ActiveRecord implements SimpleOfferInterface, BaseFindYmlInterface, EscapedAttributes
 {
 
     /**
@@ -119,6 +120,20 @@ class SimpleOffer extends ActiveRecord implements SimpleOfferInterface, BaseFind
         } else {
             return null;
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLocal_Delivery_Cost()
+    {
+        return null;
+    }
+
+    public function getEscapedAttributes() {
+        return [
+            'name'
+        ];
     }
 
     /**
