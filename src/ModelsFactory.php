@@ -9,7 +9,7 @@
 namespace pastuhov\ymlcatalog;
 
 use yii\base\Exception;
-use yii\base\Object;
+use yii\base\BaseObject;
 use pastuhov\ymlcatalog\models\BaseModel;
 use pastuhov\ymlcatalog\models\Category;
 use pastuhov\ymlcatalog\models\Currency;
@@ -18,7 +18,7 @@ use pastuhov\ymlcatalog\models\Shop;
 use pastuhov\ymlcatalog\models\SimpleOffer;
 use pastuhov\ymlcatalog\models\DeliveryOption;
 
-class ModelsFactory extends Object
+class ModelsFactory extends BaseObject
 {
     public $modelClass = null;
     public function create() {

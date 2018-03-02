@@ -11,7 +11,7 @@ use pastuhov\ymlcatalog\models\DeliveryOption;
 use Yii;
 use pastuhov\FileStream\BaseFileStream;
 use yii\base\Exception;
-use yii\base\Object;
+use yii\base\BaseObject;
 use yii\db\ActiveRecordInterface;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
@@ -21,7 +21,7 @@ use yii\db\ActiveQuery;
  *
  * @package pastuhov\ymlcatalog
  */
-class YmlCatalog extends Object
+class YmlCatalog extends BaseObject
 {
     /**
      * @var BaseFileStream
